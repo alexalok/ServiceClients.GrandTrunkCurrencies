@@ -68,14 +68,15 @@ namespace IsKernel.ServiceClients.GrandTrunk.HistoricCurrencyConverter.Clients.C
 			else
 			{
 				request.Resource = CURRENCIES_OPTION;
-			}
-			_client.ExecuteAsync(request, response => 
-				{
- 					var separator = Environment.NewLine.ToCharArray();
-					var availableCurrencies = response.Content.Split(separator).ToList();
-					taskCompletionSource.SetResult(availableCurrencies);					
-				});
-			return taskCompletionSource.Task;
+            }
+            _client.ExecuteAsync(request).ContinueWith(t =>
+            {
+                var separator = Environment.NewLine.ToCharArray();
+                var availableCurrencies = t.Result.Content.Split(separator).ToList();
+                taskCompletionSource.SetResult(availableCurrencies);
+            });
+
+            return taskCompletionSource.Task;
 		}
 	
 		public Task<ConversionRate> GetConversionRateAsync(string fromCode, string toCode)
@@ -124,11 +125,11 @@ namespace IsKernel.ServiceClients.GrandTrunk.HistoricCurrencyConverter.Clients.C
 								   + OPTION_SEPARATOR + fromCode
 								   + OPTION_SEPARATOR + toCode;
 			}
-			_client.ExecuteAsync(request, response =>
+			_client.ExecuteAsync(request).ContinueWith(t =>
 				{
 					try
 					{
-						var result = Decimal.Parse(response.Content);
+						var result = Decimal.Parse(t.Result.Content);
 						var conversionRate = new ConversionRate(fromCode, toCode, result, date);
 						taskCompletionSource.SetResult(conversionRate);
 					}
@@ -170,10 +171,10 @@ namespace IsKernel.ServiceClients.GrandTrunk.HistoricCurrencyConverter.Clients.C
 							   + OPTION_SEPARATOR + GetDateFormat(end)
 							   + OPTION_SEPARATOR + fromCode 
 							   + OPTION_SEPARATOR + toCode;
-			_client.ExecuteAsync(request, response =>
+			_client.ExecuteAsync(request).ContinueWith(t =>
 				{
 					var separator = Environment.NewLine.ToCharArray();
-					var dateAndRateList = response.Content.Split(separator).ToList();
+					var dateAndRateList = t.Result.Content.Split(separator).ToList();
 					//Eliminates the last element which is only whitespace
 					dateAndRateList.Remove(dateAndRateList.Last());
 					var conversionRatesList = new List<ConversionRate>();

@@ -1,65 +1,29 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <ProjectGuid>{D6573400-3EB1-4C0D-AE5E-AA9651D2A891}</ProjectGuid>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <TargetFramework>net7.0</TargetFramework>
     <OutputType>Library</OutputType>
-    <RootNamespace>IsKernel.ServiceClients.GrandTrunk.HistoricCurrencyConverter</RootNamespace>
-    <AssemblyName>IsKernel.ServiceClients.GrandTrunk.HistoricCurrencyConverter</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
     <NoWin32Manifest>False</NoWin32Manifest>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <AssemblyTitle>IsKernel.ServiceClients.GrandTrunk.HistoricCurrencyConverter</AssemblyTitle>
+    <Product>IsKernel.ServiceClients.GrandTrunk.HistoricCurrencyConverter</Product>
+    <Copyright>Copyright 2014</Copyright>
+    <AssemblyVersion>2.0.%2a</AssemblyVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <OutputPath>bin\Debug\</OutputPath>
-    <DebugSymbols>True</DebugSymbols>
-    <DebugType>Full</DebugType>
-    <Optimize>False</Optimize>
     <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <OutputPath>bin\Release\</OutputPath>
-    <DebugSymbols>False</DebugSymbols>
     <DebugType>None</DebugType>
-    <Optimize>True</Optimize>
-    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
-    <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="RestSharp">
-      <HintPath>..\packages\RestSharp.104.1\lib\net4\RestSharp.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core">
+    <Reference Update="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Xml.Linq">
+    <Reference Update="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Clients\Abstract\IGrandTrunkCurrencyConversionService.cs" />
-    <Compile Include="Clients\Concrete\GrandTrunkCurrencyConversionService.cs" />
-    <Compile Include="Contracts\ConversionRate.cs" />
-    <Compile Include="Exceptions\HistoricCurrencyConverterException.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
+    <PackageReference Include="RestSharp" Version="110.2.0" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Clients\Abstract" />
-    <Folder Include="Clients\Concrete" />
-    <Folder Include="Clients" />
-    <Folder Include="Exceptions" />
-    <Folder Include="Contracts" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="License.txt" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
