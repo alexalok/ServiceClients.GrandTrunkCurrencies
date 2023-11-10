@@ -6,6 +6,7 @@ using RestSharp;
 using IsKernel.ServiceClients.GrandTrunk.HistoricCurrencyConverter.Clients.Abstract;
 using IsKernel.ServiceClients.GrandTrunk.HistoricCurrencyConverter.Contracts;
 using IsKernel.ServiceClients.GrandTrunk.HistoricCurrencyConverter.Exceptions;
+using System.Globalization;
 
 namespace IsKernel.ServiceClients.GrandTrunk.HistoricCurrencyConverter.Clients.Concrete
 {
@@ -129,7 +130,7 @@ namespace IsKernel.ServiceClients.GrandTrunk.HistoricCurrencyConverter.Clients.C
 				{
 					try
 					{
-						var result = Decimal.Parse(t.Result.Content);
+						var result = Decimal.Parse(t.Result.Content, NumberStyles.Float);
 						var conversionRate = new ConversionRate(fromCode, toCode, result, date);
 						taskCompletionSource.SetResult(conversionRate);
 					}
