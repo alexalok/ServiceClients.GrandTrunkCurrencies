@@ -134,10 +134,10 @@ namespace IsKernel.ServiceClients.GrandTrunk.HistoricCurrencyConverter.Clients.C
 						var conversionRate = new ConversionRate(fromCode, toCode, result, date);
 						taskCompletionSource.SetResult(conversionRate);
 					}
-					catch(Exception)
+					catch(Exception ex)
 					{
 						var conversionRate = new ConversionRate(fromCode, toCode, 0.0m, date);
-						taskCompletionSource.SetResult(conversionRate);
+						taskCompletionSource.SetException(ex);
 					}
 				});
 			return taskCompletionSource.Task;
