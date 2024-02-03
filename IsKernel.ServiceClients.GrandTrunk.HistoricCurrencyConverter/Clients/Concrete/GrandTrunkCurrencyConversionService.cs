@@ -10,65 +10,65 @@ using System.Globalization;
 
 namespace IsKernel.ServiceClients.GrandTrunk.HistoricCurrencyConverter.Clients.Concrete
 {
-	public class GrandTrunkCurrencyConversionService : IGrandTrunkCurrencyConversionService
-	{	
-		private const string BASE_URL = "http://currencies.apps.grandtrunk.net/";
-		private const string CURRENCIES_OPTION = "/currencies";
-		private const string CONVERT_LATEST_OPTION = "/getlatest";
-		private const string CONVERT_OPTION = "/getrate";
-		private const string CONVERT_RANGE = "/getrange";
-		
-		private const string ERROR_DATE_IN_THE_FUTURE 
-				= "You can only obtain the data " +
-				  "from the past or present, not the future.";
-		private const string ERROR_START_DATE_LATER_THAN_END_DATE 
-				= "In a time interval the start date must be before " +
-				  "the end date";
-		
-		private const string RANGE_SEPARATOR = " ";
-		private const string OPTION_SEPARATOR = "/";
-		
-		private readonly RestClient _client;
-		
-		public GrandTrunkCurrencyConversionService()
-		{
-			_client = new RestClient(BASE_URL);
-		}
-		
-		private string GetDateFormat(DateTime? date)
-		{			
-			string dateString = string.Empty;
-			if(date.HasValue == true)
-			{
-				dateString = date.Value.ToString("yyyy-MM-dd");
-			}
-			return dateString;
-		}
-				
-		public Task<List<string>> GetListOfSupportedCurrenciesAsync()
-		{
-			var availableCurrencies = GetListOfSupportedCurrenciesAsync(null);
-			return availableCurrencies;
-		}
-		
-		public Task<List<string>> GetListOfSupportedCurrenciesAsync(DateTime? date)
-		{						
-			var taskCompletionSource = new TaskCompletionSource<List<string>>();
-			var request = new RestRequest();
-			if(date != null)
-			{
-				if( ( (DateTime)(date) ).CompareTo(DateTime.Now) <= 0 )
-				{
-					request.Resource = CURRENCIES_OPTION + OPTION_SEPARATOR + GetDateFormat(date);
-				}
-				else
-				{
-					throw new HistoricCurrencyConverterException(ERROR_DATE_IN_THE_FUTURE);
-				}
-			}
-			else
-			{
-				request.Resource = CURRENCIES_OPTION;
+    public class GrandTrunkCurrencyConversionService : IGrandTrunkCurrencyConversionService
+    {
+        private const string BASE_URL = "https://currencies.apps.grandtrunk.net/";
+        private const string CURRENCIES_OPTION = "/currencies";
+        private const string CONVERT_LATEST_OPTION = "/getlatest";
+        private const string CONVERT_OPTION = "/getrate";
+        private const string CONVERT_RANGE = "/getrange";
+
+        private const string ERROR_DATE_IN_THE_FUTURE
+                = "You can only obtain the data " +
+                  "from the past or present, not the future.";
+        private const string ERROR_START_DATE_LATER_THAN_END_DATE
+                = "In a time interval the start date must be before " +
+                  "the end date";
+
+        private const string RANGE_SEPARATOR = " ";
+        private const string OPTION_SEPARATOR = "/";
+
+        private readonly RestClient _client;
+
+        public GrandTrunkCurrencyConversionService()
+        {
+            _client = new RestClient(BASE_URL);
+        }
+
+        private string GetDateFormat(DateTime? date)
+        {
+            string dateString = string.Empty;
+            if (date.HasValue == true)
+            {
+                dateString = date.Value.ToString("yyyy-MM-dd");
+            }
+            return dateString;
+        }
+
+        public Task<List<string>> GetListOfSupportedCurrenciesAsync()
+        {
+            var availableCurrencies = GetListOfSupportedCurrenciesAsync(null);
+            return availableCurrencies;
+        }
+
+        public Task<List<string>> GetListOfSupportedCurrenciesAsync(DateTime? date)
+        {
+            var taskCompletionSource = new TaskCompletionSource<List<string>>();
+            var request = new RestRequest();
+            if (date != null)
+            {
+                if (((DateTime) (date)).CompareTo(DateTime.Now) <= 0)
+                {
+                    request.Resource = CURRENCIES_OPTION + OPTION_SEPARATOR + GetDateFormat(date);
+                }
+                else
+                {
+                    throw new HistoricCurrencyConverterException(ERROR_DATE_IN_THE_FUTURE);
+                }
+            }
+            else
+            {
+                request.Resource = CURRENCIES_OPTION;
             }
             _client.ExecuteAsync(request).ContinueWith(t =>
             {
