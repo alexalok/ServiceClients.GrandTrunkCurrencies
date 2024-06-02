@@ -127,26 +127,24 @@ namespace IsKernel.ServiceClients.GrandTrunk.HistoricCurrencyConverter.Clients.C
                                    + OPTION_SEPARATOR + toCode;
             }
             _client.ExecuteAsync(request).ContinueWith(t =>
+            {
+                if (t.Result.ErrorException is { } errorEx)
                 {
-                    if (t.Result.ErrorException is { } errorEx)
-                    {
-                        var conversionRate = new ConversionRate(fromCode, toCode, 0.0m, date);
-                        taskCompletionSource.SetResult(conversionRate);
-                        return;
-                    }
+                    taskCompletionSource.SetException(errorEx);
+                    return;
+                }
 
-                    try
-                    {
-                        var result = Decimal.Parse(t.Result.Content, NumberStyles.Float);
-                        var conversionRate = new ConversionRate(fromCode, toCode, result, date);
-                        taskCompletionSource.SetResult(conversionRate);
-                    }
-                    catch (Exception ex)
-                    {
-                        var conversionRate = new ConversionRate(fromCode, toCode, 0.0m, date);
-                        taskCompletionSource.SetException(ex);
-                    }
-                });
+                try
+                {
+                    var result = Decimal.Parse(t.Result.Content, NumberStyles.Float);
+                    var conversionRate = new ConversionRate(fromCode, toCode, result, date);
+                    taskCompletionSource.SetResult(conversionRate);
+                }
+                catch (Exception ex)
+                {
+                    taskCompletionSource.SetException(ex);
+                }
+            });
             return taskCompletionSource.Task;
         }
 
